@@ -32,7 +32,7 @@ try {
 # 2. 檢查 node_modules
 if (-not (Test-Path "$ScriptDir\node_modules")) {
     Write-Host "[提示] 偵測到尚未安裝套件，正在自動執行 npm install..." -ForegroundColor Yellow
-    npm install
+    npm.cmd install
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[錯誤] npm install 失敗！" -ForegroundColor Red
         exit 1
@@ -53,14 +53,14 @@ if ($portInUse) {
 # 4. 根據模式啟動
 if ($Mode -eq "prod") {
     Write-Host "[狀態] 正在進行生產環境編譯 (npm run build)..." -ForegroundColor Cyan
-    npm run build
+    npm.cmd run build
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[錯誤] 專案編譯失敗！" -ForegroundColor Red
         exit 1
     }
     Write-Host "[狀態] 啟動正式預覽伺服器: http://localhost:3000" -ForegroundColor Green
-    npm run preview
+    npm.cmd run preview
 } else {
     Write-Host "[狀態] 啟動 Vite 開發伺服器 (HMR): http://localhost:3000" -ForegroundColor Green
-    npm run dev
+    npm.cmd run dev
 }
