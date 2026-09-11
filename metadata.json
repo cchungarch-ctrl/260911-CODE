@@ -1,0 +1,7 @@
+{
+  "name": "NexusPM 營建專案與 RFI 管理系統",
+  "description": "營建工程敏捷工作看板、RFI 資訊請求簽核、圖檔變更追蹤與前後端 REST API 系統",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
