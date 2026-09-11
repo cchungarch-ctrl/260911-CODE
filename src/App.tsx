@@ -7,16 +7,21 @@ import { RfiTracker } from './components/RfiTracker';
 import { UsersView } from './components/UsersView';
 import { AnalyticsView } from './components/AnalyticsView';
 import { ApiConsole } from './components/ApiConsole';
+import { WorkHoursView } from './components/WorkHoursView';
 import { NewTaskModal } from './components/Modals/NewTaskModal';
 import { NewRfiModal } from './components/Modals/NewRfiModal';
 import { ViewRfiModal } from './components/Modals/ViewRfiModal';
 import { ImageLightboxModal } from './components/Modals/ImageLightboxModal';
 import { HtmlSourceModal } from './components/Modals/HtmlSourceModal';
+import { LogWorkHoursModal } from './components/Modals/LogWorkHoursModal';
+import { EditUserRateModal } from './components/Modals/EditUserRateModal';
 import {
   INITIAL_PROJECTS,
   INITIAL_USERS,
   INITIAL_TASKS,
   INITIAL_RFIS,
+  INITIAL_WORKLOGS,
+  INITIAL_USER_RATES,
 } from './data/initialData';
 import {
   ProjectId,
@@ -27,6 +32,8 @@ import {
   ApiLog,
   TaskStatus,
   RfiStatus,
+  WorkLog,
+  UserRate,
 } from './types';
 import { Info, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -86,6 +93,32 @@ export default function App() {
     return INITIAL_USERS;
   });
 
+  const [worklogs, setWorklogs] = useState<WorkLog[]>(() => {
+    const saved = localStorage.getItem('nexuspm_worklogs');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return INITIAL_WORKLOGS;
+      }
+    }
+    return INITIAL_WORKLOGS;
+  });
+
+  const [userRates, setUserRates] = useState<UserRate[]>(() => {
+    const saved = localStorage.getItem('nexuspm_user_rates');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.length >= INITIAL_USER_RATES.length) return parsed;
+        return INITIAL_USER_RATES;
+      } catch {
+        return INITIAL_USER_RATES;
+      }
+    }
+    return INITIAL_USER_RATES;
+  });
+
   const [apiLogs, setApiLogs] = useState<ApiLog[]>(() => [
     {
       id: 'log-init-1',
@@ -121,6 +154,8 @@ export default function App() {
   const [isViewRfiOpen, setIsViewRfiOpen] = useState(false);
   const [selectedRfiId, setSelectedRfiId] = useState<string | null>(null);
   const [isHtmlModalOpen, setIsHtmlModalOpen] = useState(false);
+  const [isLogWorkHoursOpen, setIsLogWorkHoursOpen] = useState(false);
+  const [isEditRateOpen, setIsEditRateOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<{ url: string; title: string } | null>(null);
 
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -141,6 +176,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('nexuspm_users', JSON.stringify(users));
   }, [users]);
+
+  useEffect(() => {
+    localStorage.setItem('nexuspm_worklogs', JSON.stringify(worklogs));
+  }, [worklogs]);
+
+  useEffect(() => {
+    localStorage.setItem('nexuspm_user_rates', JSON.stringify(userRates));
+  }, [userRates]);
 
   const showToast = (message: string, type: 'info' | 'success' | 'warning' = 'info') => {
     const id = `${Date.now()}-${Math.random()}`;
@@ -307,6 +350,50 @@ export default function App() {
     addApiLog('POST', '/api/v1/users', { success: true, user: newUser }, 201, userData);
   };
 
+  const handleCreateWorkLog = (logData: Omit<WorkLog, 'id' | 'createdAt'>) => {
+    const newId = `WL-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newLog: WorkLog = {
+      ...logData,
+      id: newId,
+      createdAt: new Date().toISOString().split('T')[0],
+    };
+    setWorklogs((prev) => [newLog, ...prev]);
+    showToast(`工時已登錄 ${newLog.hours}H (+${newLog.overtimeHours}H)`, 'success');
+    addApiLog(
+      'POST',
+      '/api/v1/worklogs',
+      {
+        success: true,
+        createdWorkLog: newLog,
+      },
+      201,
+      logData
+    );
+  };
+
+  const handleDeleteWorkLog = (logId: string) => {
+    setWorklogs((prev) => prev.filter((w) => w.id !== logId));
+    showToast(`工時紀錄 ${logId} 已刪除`, 'warning');
+    addApiLog('DELETE', `/api/v1/worklogs/${logId}`, { success: true, deletedLogId: logId });
+  };
+
+  const handleUpdateUserRate = (rate: UserRate) => {
+    setUserRates((prev) => {
+      const exists = prev.some((r) => r.userId === rate.userId);
+      if (exists) return prev.map((r) => (r.userId === rate.userId ? rate : r));
+      return [...prev, rate];
+    });
+    const userName = users.find((u) => u.id === rate.userId)?.name || rate.userId;
+    showToast(`費率已更新: ${userName} NT$ ${rate.hourlyRate}/hr`, 'success');
+    addApiLog(
+      'PUT',
+      `/api/v1/users/${rate.userId}/rate`,
+      { success: true, rate },
+      200,
+      rate
+    );
+  };
+
   const handleSelectRfiFromTask = (rfiId: string) => {
     setActiveTab('rfi');
     setSelectedRfiId(rfiId);
@@ -441,6 +528,19 @@ export default function App() {
             />
           )}
 
+          {activeTab === 'workhours' && (
+            <WorkHoursView
+              worklogs={worklogs}
+              userRates={userRates}
+              tasks={tasks}
+              users={users}
+              currentProjectId={currentProject}
+              onOpenLogModal={() => setIsLogWorkHoursOpen(true)}
+              onOpenRateModal={() => setIsEditRateOpen(true)}
+              onDeleteWorkLog={handleDeleteWorkLog}
+            />
+          )}
+
           {activeTab === 'users' && (
             <UsersView
               users={users}
@@ -510,12 +610,32 @@ export default function App() {
         onClose={() => setLightboxImage(null)}
       />
 
+      <LogWorkHoursModal
+        isOpen={isLogWorkHoursOpen}
+        onClose={() => setIsLogWorkHoursOpen(false)}
+        tasks={tasks}
+        users={users}
+        currentProjectId={currentProject}
+        worklogs={worklogs}
+        onCreateWorkLog={handleCreateWorkLog}
+      />
+
+      <EditUserRateModal
+        isOpen={isEditRateOpen}
+        onClose={() => setIsEditRateOpen(false)}
+        users={users}
+        userRates={userRates}
+        onUpdateUserRate={handleUpdateUserRate}
+      />
+
       <HtmlSourceModal
         isOpen={isHtmlModalOpen}
         onClose={() => setIsHtmlModalOpen(false)}
         tasks={tasks}
         rfis={rfis}
         users={users}
+        worklogs={worklogs}
+        userRates={userRates}
         currentProjectId={currentProject}
       />
 

@@ -84,6 +84,38 @@ export interface User {
 }
 ```
 
+### 5. 工時紀錄 (WorkLog)
+```typescript
+export interface WorkLog {
+  id: string;              // 唯一識別碼，如 "WL-0001"
+  taskId: string;          // 關聯任務 KanbanTask.id
+  userId: string;          // 填報人員 User.id
+  projectId: ProjectId;    // 所屬專案 ID（由任務繼承）
+  date: string;            // 工時日期 (YYYY-MM-DD)
+  hours: number;           // 正常工時（小時，支援小數）
+  overtimeHours: number;   // 加班時數（小時，預設 0）
+  note: string;            // 工作內容摘要
+  createdAt: string;       // 建立時間戳記
+}
+```
+
+### 6. 人員費率設定 (UserRate)
+```typescript
+export interface UserRate {
+  userId: string;           // 對應 User.id
+  hourlyRate: number;       // 每小時費率 (NTD / HR)
+  overtimeMultiplier: number; // 加班費率倍數（預設 1.5）
+}
+```
+
+### 7. 任務預估工時擴充欄位 (KanbanTask.estimatedHours)
+```typescript
+export interface KanbanTask {
+  // ...既有欄位
+  estimatedHours?: number;  // 預估總工時（小時），供工時偏差對比使用
+}
+```
+
 ---
 
 ## 3.2 瀏覽器持久化規格 (LocalStorage Persistence)
@@ -96,6 +128,8 @@ export interface User {
 | `nexuspm_tasks` | `JSON array (KanbanTask[])` | 若不存在或為空則從 `INITIAL_TASKS` 初始化 |
 | `nexuspm_rfis` | `JSON array (RfiItem[])` | 若不存在則從 `INITIAL_RFIS` 初始化 |
 | `nexuspm_users` | `JSON array (User[])` | 若長度不足則從 `INITIAL_USERS` 補齊 |
+| `nexuspm_worklogs` | `JSON array (WorkLog[])` | 若不存在則從 `INITIAL_WORKLOGS` 初始化 |
+| `nexuspm_user_rates` | `JSON array (UserRate[])` | 若長度不足則從 `INITIAL_USER_RATES` 補齊 |
 
 ---
 

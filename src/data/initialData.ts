@@ -1,4 +1,4 @@
-import { Project, User, KanbanTask, RfiItem } from '../types';
+import { Project, User, KanbanTask, RfiItem, WorkLog, UserRate } from '../types';
 
 export const INITIAL_PROJECTS: Project[] = [
   {
@@ -108,6 +108,7 @@ export const INITIAL_TASKS: KanbanTask[] = [
     image: null,
     rfiId: null,
     createdAt: '2026-09-08',
+    estimatedHours: 32,
   },
   {
     id: 'TASK-002',
@@ -246,6 +247,7 @@ export const INITIAL_TASKS: KanbanTask[] = [
     createdAt: '2026-09-02',
     color: '#3b82f6',
     progress: 65,
+    estimatedHours: 48,
   },
   {
     id: 'TASK-102',
@@ -314,6 +316,7 @@ export const INITIAL_TASKS: KanbanTask[] = [
     createdAt: '2026-09-07',
     color: '#8b5cf6',
     progress: 80,
+    estimatedHours: 40,
   },
   {
     id: 'TASK-201',
@@ -331,6 +334,7 @@ export const INITIAL_TASKS: KanbanTask[] = [
     createdAt: '2026-09-08',
     color: '#3b82f6',
     progress: 50,
+    estimatedHours: 64,
   },
   {
     id: 'TASK-301',
@@ -406,4 +410,94 @@ export const INITIAL_RFIS: RfiItem[] = [
     linkedTaskId: null,
     createdAt: '2026-09-09',
   }
+];
+
+export const INITIAL_USER_RATES: UserRate[] = [
+  { userId: 'usr_1', hourlyRate: 950, overtimeMultiplier: 1.5 },
+  { userId: 'usr_2', hourlyRate: 850, overtimeMultiplier: 1.5 },
+  { userId: 'usr_3', hourlyRate: 900, overtimeMultiplier: 1.5 },
+  { userId: 'usr_4', hourlyRate: 1100, overtimeMultiplier: 1.5 },
+  { userId: 'usr_5', hourlyRate: 850, overtimeMultiplier: 1.5 },
+  { userId: 'usr_6', hourlyRate: 800, overtimeMultiplier: 1.5 },
+  { userId: 'usr_7', hourlyRate: 700, overtimeMultiplier: 1.5 },
+];
+
+export const INITIAL_WORKLOGS: WorkLog[] = [
+  {
+    id: 'WL-0001',
+    taskId: 'TASK-101',
+    userId: 'usr_3',
+    projectId: 'PRJ-001',
+    date: '2026-09-10',
+    hours: 8,
+    overtimeHours: 1.5,
+    note: '12F 柱牆鋼筋繫筋綁紮與查驗紀錄',
+    createdAt: '2026-09-10',
+  },
+  {
+    id: 'WL-0002',
+    taskId: 'TASK-101',
+    userId: 'usr_3',
+    projectId: 'PRJ-001',
+    date: '2026-09-11',
+    hours: 8,
+    overtimeHours: 0,
+    note: '續辦綁紮作業與箍筋彎鉤抽查',
+    createdAt: '2026-09-11',
+  },
+  {
+    id: 'WL-0003',
+    taskId: 'TASK-102',
+    userId: 'usr_4',
+    projectId: 'PRJ-001',
+    date: '2026-09-09',
+    hours: 7,
+    overtimeHours: 1,
+    note: 'B2 風管穿樑預留孔位衝突檢核',
+    createdAt: '2026-09-09',
+  },
+  {
+    id: 'WL-0004',
+    taskId: 'TASK-104',
+    userId: 'usr_3',
+    projectId: 'PRJ-001',
+    date: '2026-09-11',
+    hours: 6.5,
+    overtimeHours: 0,
+    note: '地下室連續壁滲水點高壓灌漿修補收尾',
+    createdAt: '2026-09-11',
+  },
+  {
+    id: 'WL-0005',
+    taskId: 'TASK-105',
+    userId: 'usr_1',
+    projectId: 'PRJ-001',
+    date: '2026-09-11',
+    hours: 8,
+    overtimeHours: 2,
+    note: '1F 大廳石材乾掛防震扣件抽驗與計算書比對',
+    createdAt: '2026-09-11',
+  },
+  {
+    id: 'WL-0006',
+    taskId: 'TASK-201',
+    userId: 'usr_2',
+    projectId: 'PRJ-002',
+    date: '2026-09-12',
+    hours: 8,
+    overtimeHours: 0,
+    note: '華夫板防微振預埋件水平放樣',
+    createdAt: '2026-09-12',
+  },
+  {
+    id: 'WL-0007',
+    taskId: 'TASK-001',
+    userId: 'usr_1',
+    projectId: 'PRJ-TEAM',
+    date: '2026-09-11',
+    hours: 6,
+    overtimeHours: 0,
+    note: '品牌調性更新進度確認',
+    createdAt: '2026-09-11',
+  },
 ];

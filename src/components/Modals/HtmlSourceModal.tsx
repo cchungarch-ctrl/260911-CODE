@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Copy, Check, Download, Monitor, Code2 } from 'lucide-react';
 import { generateStandaloneHtml } from '../../utils/generateHtml';
-import { KanbanTask, RfiItem, User, ProjectId } from '../../types';
+import { KanbanTask, RfiItem, User, WorkLog, UserRate, ProjectId } from '../../types';
 
 interface HtmlSourceModalProps {
   isOpen: boolean;
@@ -9,6 +9,8 @@ interface HtmlSourceModalProps {
   tasks: KanbanTask[];
   rfis: RfiItem[];
   users: User[];
+  worklogs: WorkLog[];
+  userRates: UserRate[];
   currentProjectId: ProjectId;
 }
 
@@ -18,6 +20,8 @@ export const HtmlSourceModal: React.FC<HtmlSourceModalProps> = ({
   tasks,
   rfis,
   users,
+  worklogs,
+  userRates,
   currentProjectId,
 }) => {
   const [activeTab, setActiveTab] = useState<'preview' | 'code'>('preview');
@@ -29,6 +33,8 @@ export const HtmlSourceModal: React.FC<HtmlSourceModalProps> = ({
     tasks,
     rfis,
     users,
+    worklogs,
+    userRates,
     currentProjectId,
   });
 

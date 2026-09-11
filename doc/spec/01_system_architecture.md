@@ -48,7 +48,8 @@ NexusPM 是專為大型營造、公共工程與建築營建專案設計的敏捷
 │   │   ├── KanbanBoard.tsx    # 敏捷工作看板
 │   │   ├── RfiTracker.tsx     # RFI 追蹤與審查模組
 │   │   ├── Sidebar.tsx        # 側邊導航列
-│   │   └── UsersView.tsx      # 人員角色視圖
+│   │   ├── UsersView.tsx      # 人員角色視圖
+│   │   └── WorkHoursView.tsx  # 工時計算與成本核算模組
 │   ├── data/
 │   │   └── initialData.ts     # 初始預設專案、人員、任務與 RFI 資料
 │   ├── utils/

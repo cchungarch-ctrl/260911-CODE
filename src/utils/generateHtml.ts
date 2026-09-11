@@ -1,9 +1,11 @@
-import { KanbanTask, RfiItem, User, ProjectId } from '../types';
+import { KanbanTask, RfiItem, User, WorkLog, UserRate, ProjectId } from '../types';
 
 interface GenerateHtmlParams {
   tasks: KanbanTask[];
   rfis: RfiItem[];
   users: User[];
+  worklogs: WorkLog[];
+  userRates: UserRate[];
   currentProjectId: ProjectId;
 }
 
@@ -11,6 +13,8 @@ export function generateStandaloneHtml({
   tasks,
   rfis,
   users,
+  worklogs,
+  userRates,
   currentProjectId,
 }: GenerateHtmlParams): string {
   const jsonState = JSON.stringify(
@@ -19,6 +23,8 @@ export function generateStandaloneHtml({
       users,
       tasks,
       rfis,
+      worklogs,
+      userRates,
     },
     null,
     2

@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Columns3,
   ClipboardList,
+  Clock,
   Users,
   PieChart,
   Terminal,
@@ -159,6 +160,18 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
 
         <button
+          onClick={() => onChangeTab('workhours')}
+          className={`px-4 py-3 uppercase tracking-widest flex items-center gap-2 transition-none border-r border-l border-black whitespace-nowrap cursor-pointer ${
+            activeTab === 'workhours'
+              ? 'bg-black text-white font-bold border-b-0'
+              : 'bg-white text-black hover:bg-neutral-200 border-b border-black'
+          }`}
+        >
+          <Clock size={16} strokeWidth={1.5} />
+          <span>[04] 工時管理 (WORK HOURS)</span>
+        </button>
+
+        <button
           onClick={() => onChangeTab('analytics')}
           className={`px-4 py-3 uppercase tracking-widest flex items-center gap-2 transition-none border-r border-l border-black whitespace-nowrap cursor-pointer ${
             activeTab === 'analytics'
@@ -167,7 +180,7 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           <PieChart size={16} strokeWidth={1.5} />
-          <span>[04] 專案圖表 (ANALYTICS)</span>
+          <span>[05] 專案圖表 (ANALYTICS)</span>
         </button>
 
         <button
@@ -179,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           <Users size={16} strokeWidth={1.5} />
-          <span>[05] 團隊名冊 (TEAM)</span>
+          <span>[06] 團隊名冊 (TEAM)</span>
         </button>
 
         <button
@@ -191,7 +204,7 @@ export const Header: React.FC<HeaderProps> = ({
           }`}
         >
           <Terminal size={16} strokeWidth={1.5} />
-          <span>[06] REST API 控制台</span>
+          <span>[07] REST API 控制台</span>
         </button>
       </div>
     </header>

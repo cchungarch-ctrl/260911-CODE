@@ -37,6 +37,25 @@ export interface KanbanTask {
   createdAt: string;
   color?: string;
   progress?: number;
+  estimatedHours?: number;
+}
+
+export interface WorkLog {
+  id: string;
+  taskId: string;
+  userId: string;
+  projectId: ProjectId;
+  date: string;
+  hours: number;
+  overtimeHours: number;
+  note: string;
+  createdAt: string;
+}
+
+export interface UserRate {
+  userId: string;
+  hourlyRate: number;
+  overtimeMultiplier: number;
 }
 
 export type RfiStatus = '待處理' | '審查中' | '已回覆' | '已駁回';
@@ -70,4 +89,4 @@ export interface ApiLog {
   timestamp: string;
 }
 
-export type TabType = 'gantt' | 'kanban' | 'rfi' | 'users' | 'analytics' | 'api';
+export type TabType = 'gantt' | 'kanban' | 'rfi' | 'workhours' | 'users' | 'analytics' | 'api';

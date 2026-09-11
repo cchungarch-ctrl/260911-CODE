@@ -3,6 +3,7 @@ import {
   CalendarDays,
   Columns3,
   ClipboardList,
+  Clock,
   Users,
   PieChart,
   Terminal,
@@ -127,6 +128,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </span>
         </button>
 
+        {/* Work Hours */}
+        <button
+          onClick={() => onChangeTab('workhours')}
+          className={`w-11 h-11 border flex items-center justify-center transition-none cursor-pointer relative group ${
+            activeTab === 'workhours'
+              ? 'bg-white text-black border-white'
+              : 'border-transparent text-neutral-400 hover:text-white hover:border-neutral-700 hover:bg-neutral-900'
+          }`}
+          title="工時管理 [06]"
+        >
+          <Clock size={20} strokeWidth={1.5} />
+          <span className="absolute left-16 bg-black text-white text-[11px] uppercase tracking-widest px-3 py-1.5 border border-white whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-none z-50">
+            06. 工時管理 (Work Hours)
+          </span>
+        </button>
+
         <div className="w-8 h-[1px] bg-neutral-800 my-2" />
 
         {/* REST API Console */}
@@ -137,11 +154,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               ? 'bg-white text-black border-white'
               : 'border-transparent text-neutral-400 hover:text-white hover:border-neutral-700 hover:bg-neutral-900'
           }`}
-          title="API 控制台 [06]"
+          title="API 控制台 [07]"
         >
           <Terminal size={20} strokeWidth={1.5} />
           <span className="absolute left-16 bg-black text-white text-[11px] uppercase tracking-widest px-3 py-1.5 border border-white whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-none z-50">
-            06. REST API 終端 (Console)
+            07. REST API 終端 (Console)
           </span>
         </button>
 
